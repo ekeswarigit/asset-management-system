@@ -20,11 +20,10 @@ public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-   
     private Long empId;
     private String empName;
-    private String password;
     private String email;
+    private String password;
     
     @ManyToOne
     @JoinColumn(name = "role_id")

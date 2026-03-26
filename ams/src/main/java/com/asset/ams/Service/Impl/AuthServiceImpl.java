@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.asset.ams.Repository.EmployeeRepository;
 import com.asset.ams.Service.AuthService;
 import com.asset.ams.config.JwtUtil;
+import com.asset.ams.dto.RequestDTO.AuthRequestDto;
 import com.asset.ams.dto.RequestDTO.EmployeeRequestDto;
 import com.asset.ams.dto.Response.EmployeeResponseDto;
 import com.asset.ams.mapper.EmployeeMapper;
@@ -21,16 +22,16 @@ public class AuthServiceImpl implements AuthService{
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
-    // @Override
-    //  public EmployeeResponseDto registerUser(EmployeeRequestDto dto) {
-
-    //     Employee user = EmployeeMapper.toEntity(dto);
-    //     user.setPassword(passwordEncoder.encode(user.getPassword()));
-    //     Employee savedUser = employeeRepository.save(user);
-    //     return EmployeeMapper.toDto(savedUser);
-    // }
     @Override
-    public String login(EmployeeRequestDto dto) throws RuntimeException {
+     public EmployeeResponseDto registerUser(EmployeeRequestDto dto) {
+
+        Employee user = EmployeeMapper.toEntity(dto);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        Employee savedUser = employeeRepository.save(user);
+        return EmployeeMapper.toDto(savedUser);
+    }
+    @Override
+    public String login(AuthRequestDto dto) throws RuntimeException {
         
         Employee emp = employeeRepository.findByEmpName(dto.getEmpName())
                 .orElseThrow(() -> new RuntimeException("Employee not found"));
