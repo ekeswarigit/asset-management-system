@@ -1,7 +1,5 @@
 package com.asset.ams.dto.Response;
 
-import com.asset.ams.model.Role;
-
 import lombok.Builder;
 import lombok.Data;
 
@@ -12,5 +10,5 @@ public class EmployeeResponseDto {
     private Long empId;
     private String empName;
     private String email;
-    private Role role;
+    private String roleName;
 }

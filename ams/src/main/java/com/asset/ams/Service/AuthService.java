@@ -6,7 +6,7 @@ import com.asset.ams.dto.Response.EmployeeResponseDto;
 
 public interface AuthService {
 
-    EmployeeResponseDto registerUser(EmployeeRequestDto dto);
+    EmployeeResponseDto registerEmployee(EmployeeRequestDto dto);
     
     String login(AuthRequestDto dto);
 }

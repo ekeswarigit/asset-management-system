@@ -2,7 +2,6 @@ package com.asset.ams.Controller;
 
 import java.time.LocalDateTime;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +28,7 @@ public class AuthController {
         return ApiResponse.<EmployeeResponseDto>builder()
                 .success(true)
                 .message("User registered successfully")
-                .data(authService.registerUser(dto))
+                .data(authService.registerEmployee(dto))
                 .errorCode(0)
                 .timestamp(LocalDateTime.now())
                 .build();

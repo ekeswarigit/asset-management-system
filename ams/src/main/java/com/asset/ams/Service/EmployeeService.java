@@ -7,16 +7,14 @@ import com.asset.ams.dto.Response.EmployeeResponseDto;
 
 public interface EmployeeService {
 
-  //  EmployeeResponseDto createEmployee(EmployeeRequestDto dto);
+    EmployeeResponseDto createEmployee(EmployeeRequestDto dto);
 
-  //  EmployeeResponseDto updateEmployee(Long id, EmployeeRequestDto dto);
+    List<EmployeeResponseDto> getAllEmployees();
 
-  //  void deleteEmployee(Long id); // Soft delete
+    EmployeeResponseDto getEmployeeById(Long id);
 
-    //List<EmployeeResponseDto> getAllEmployees();
+    EmployeeResponseDto updateEmployee(Long id, EmployeeRequestDto dto);
 
-    //EmployeeResponseDto getEmployeeById(Long id);
-
-    List<EmployeeResponseDto> getAll();
+    void deleteEmployee(Long id);
 
 }

@@ -4,6 +4,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.asset.ams.Repository.EmployeeRepository;
+import com.asset.ams.Repository.RoleRepository;
 import com.asset.ams.Service.AuthService;
 import com.asset.ams.config.JwtUtil;
 import com.asset.ams.dto.RequestDTO.AuthRequestDto;
@@ -11,6 +12,7 @@ import com.asset.ams.dto.RequestDTO.EmployeeRequestDto;
 import com.asset.ams.dto.Response.EmployeeResponseDto;
 import com.asset.ams.mapper.EmployeeMapper;
 import com.asset.ams.model.Employee;
+import com.asset.ams.model.Role;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,11 +23,15 @@ public class AuthServiceImpl implements AuthService{
     private final EmployeeRepository employeeRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+    private final RoleRepository roleRepository;
 
     @Override
-     public EmployeeResponseDto registerUser(EmployeeRequestDto dto) {
+     public EmployeeResponseDto registerEmployee(EmployeeRequestDto dto) {
 
-        Employee user = EmployeeMapper.toEntity(dto);
+        Role role = roleRepository.findByRoleName("EMPLOYEE")
+            .orElseThrow(() -> new RuntimeException("Role not found"));
+
+        Employee user = EmployeeMapper.toEntity(dto, role);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         Employee savedUser = employeeRepository.save(user);
         return EmployeeMapper.toDto(savedUser);

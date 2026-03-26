@@ -18,5 +18,4 @@ public class CorsProperties {
     private boolean allowCredentials;
     private long maxAge;
 
-    // Getters and Setters
 }

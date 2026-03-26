@@ -1,6 +1,5 @@
 package com.asset.ams.dto.RequestDTO;
 
-import com.asset.ams.model.Role;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
@@ -9,8 +8,8 @@ public class EmployeeRequestDto {
 
     @NotBlank(message = "Type name is required")
     private String empName;
+    private String email;
     @NotBlank(message = "Password is required")
     private String password;
-    private String email;
-    private Role role;
+    private Long roleId;
 }
