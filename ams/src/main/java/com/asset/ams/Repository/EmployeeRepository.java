@@ -10,7 +10,7 @@ import com.asset.ams.model.Employee;
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long>{
 
-    Optional<Employee> findByEmpName(String empName);
+    Optional<Employee> findByEmail(String email);
 
     // boolean existsByEmpName(String empName);
 

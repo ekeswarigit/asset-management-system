@@ -16,6 +16,8 @@ import com.asset.ams.Service.EmployeeService;
 import com.asset.ams.dto.ApiResponse;
 import com.asset.ams.dto.RequestDTO.EmployeeRequestDto;
 import com.asset.ams.dto.Response.EmployeeResponseDto;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -27,13 +29,13 @@ public class EmployeeController {
 
      @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ApiResponse<EmployeeResponseDto> create(@RequestBody EmployeeRequestDto dto) {
+    public ApiResponse<EmployeeResponseDto> create(@Valid @RequestBody EmployeeRequestDto dto) {
 
         return ApiResponse.<EmployeeResponseDto>builder()
                 .success(true)
                 .message("Employee created")
                 .data(employeeService.createEmployee(dto))
-                .errorCode(0)
+                .errorCode(200)
                 .timestamp(LocalDateTime.now())
                 .build();
     }
@@ -55,7 +57,7 @@ public class EmployeeController {
     // ✅ ADMIN + EMPLOYEE
     @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
     @GetMapping("/{id}")
-    public ApiResponse<EmployeeResponseDto> getById(@PathVariable Long id) {
+    public ApiResponse<EmployeeResponseDto> getById(@Valid @PathVariable Long id) {
 
         return ApiResponse.<EmployeeResponseDto>builder()
                 .success(true)
@@ -85,7 +87,7 @@ public class EmployeeController {
     // ✅ ADMIN only
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    public ApiResponse<String> delete(@PathVariable Long id) {
+    public ApiResponse<String> delete(@Valid @PathVariable Long id) {
 
         employeeService.deleteEmployee(id);
 

@@ -17,6 +17,7 @@ import com.asset.ams.dto.ApiResponse;
 import com.asset.ams.dto.RequestDTO.AssetRequestDto;
 import com.asset.ams.dto.Response.AssetResponseDto;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/assets")
@@ -26,7 +27,7 @@ public class AssetController {
     private final AssetService assetService;
 
     @PostMapping
-    public ApiResponse<AssetResponseDto> create(@RequestBody AssetRequestDto dto) {
+    public ApiResponse<AssetResponseDto> create(@Valid @RequestBody AssetRequestDto dto) {
 
         return ApiResponse.<AssetResponseDto>builder()
                 .success(true)
@@ -38,7 +39,7 @@ public class AssetController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<AssetResponseDto> update(@PathVariable Long id,
+    public ApiResponse<AssetResponseDto> update(@Valid @PathVariable Long id,
                                                 @RequestBody AssetRequestDto dto) {
 
         return ApiResponse.<AssetResponseDto>builder()
@@ -51,7 +52,7 @@ public class AssetController {
     }
 
     @DeleteMapping("/{id}")
-    public ApiResponse<String> delete(@PathVariable Long id) {
+    public ApiResponse<String> delete(@Valid @PathVariable Long id) {
 
         assetService.delete(id);
 
@@ -65,7 +66,7 @@ public class AssetController {
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<AssetResponseDto> getById(@PathVariable Long id) {
+    public ApiResponse<AssetResponseDto> getById(@Valid @PathVariable Long id) {
 
         return ApiResponse.<AssetResponseDto>builder()
                 .success(true)
@@ -89,7 +90,7 @@ public class AssetController {
     }
 
     @GetMapping("/type/{typeId}")
-    public ApiResponse<List<AssetResponseDto>> getByType(@PathVariable Long typeId) {
+    public ApiResponse<List<AssetResponseDto>> getByType(@Valid @PathVariable Long typeId) {
 
         return ApiResponse.<List<AssetResponseDto>>builder()
                 .success(true)
