@@ -3,6 +3,7 @@ package com.asset.ams.Controller;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.asset.ams.Service.EmployeeService;
 import com.asset.ams.dto.ApiResponse;
 import com.asset.ams.dto.RequestDTO.EmployeeRequestDto;
@@ -40,15 +43,18 @@ public class EmployeeController {
                 .build();
     }
 
-    // ✅ ADMIN + EMPLOYEE
+    // ADMIN + EMPLOYEE
     @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
     @GetMapping
-    public ApiResponse<List<EmployeeResponseDto>> getAll() {
+    public ApiResponse<Page<EmployeeResponseDto>> getAll( 
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "5") int size) {
 
-        return ApiResponse.<List<EmployeeResponseDto>>builder()
+        Page<EmployeeResponseDto> data = employeeService.getAllEmployees(page, size);
+        return ApiResponse.<Page<EmployeeResponseDto>>builder()
                 .success(true)
                 .message("Employees fetched")
-                .data(employeeService.getAllEmployees())
+                .data(employeeService.getAllEmployees(page, size))
                 .errorCode(0)
                 .timestamp(LocalDateTime.now())
                 .build();
@@ -68,7 +74,7 @@ public class EmployeeController {
                 .build();
     }
 
-    // ✅ ADMIN only
+    // ADMIN only
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ApiResponse<EmployeeResponseDto> update(
@@ -84,7 +90,7 @@ public class EmployeeController {
                 .build();
     }
 
-    // ✅ ADMIN only
+    //  ADMIN only
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ApiResponse<String> delete(@Valid @PathVariable Long id) {

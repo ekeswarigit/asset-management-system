@@ -2,7 +2,11 @@ package com.asset.ams.Service.Impl;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 import com.asset.ams.Repository.EmployeeRepository;
 import com.asset.ams.Repository.RoleRepository;
 import com.asset.ams.Service.EmployeeService;
@@ -20,6 +24,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     
     private final EmployeeRepository employeeRepository;
     private final RoleRepository roleRepository;
+    private final SoftDeleteServiceImpl softDeleteServiceimpl;
 
     @Override
     public EmployeeResponseDto createEmployee(EmployeeRequestDto dto) {
@@ -33,11 +38,17 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<EmployeeResponseDto> getAllEmployees() {
-        return employeeRepository.findAll()
-                .stream()
-                .map(EmployeeMapper::toDto)
-                .toList();
+    public Page<EmployeeResponseDto> getAllEmployees(int page, int size) {
+
+         Pageable pageable = PageRequest.of(page, size);
+
+         Page<Employee> employees = employeeRepository.findAll(pageable);
+         return employees.map(EmployeeMapper::toDto);
+        // return employeeRepository.findAll()
+        //         .stream()
+        //         .filter(emp -> !emp.isDeleted())
+        //         .map(EmployeeMapper::toDto)
+        //         .toList();
     }
 
     @Override
@@ -72,6 +83,19 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee emp = employeeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Employee not found"));
 
-        employeeRepository.delete(emp);
+        softDeleteServiceimpl.softDelete(emp, "admin");
+
+        employeeRepository.save(emp);
+    }
+     //  RESTORE
+    @Override
+    public void restoreEmployee(Long id) {
+
+        Employee emp = employeeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
+
+        softDeleteServiceimpl.restore(emp);
+
+        employeeRepository.save(emp);
     }
 }

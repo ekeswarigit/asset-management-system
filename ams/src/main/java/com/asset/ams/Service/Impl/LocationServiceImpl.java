@@ -18,7 +18,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LocationServiceImpl implements LocationService {
 
+    private final SoftDeleteServiceImpl softDeleteServiceImpl;
     private final LocationRepository repository;
+
 
     @Override
     public LocationResponseDto create(LocationRequestDto dto) {
@@ -44,19 +46,14 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public void delete(Long id) {
-
-        if(!repository.existsById(id))
-            throw new RuntimeException("Location not found");
-
-        repository.deleteById(id);
-    }
-
-    @Override
     public LocationResponseDto getById(Long id) {
 
         Location loc = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Location not found"));
+
+        if (loc.isDeleted()) {
+        throw new RuntimeException("Location is deleted");
+        }
 
         return LocationMapper.toDto(loc);
     }
@@ -66,7 +63,20 @@ public class LocationServiceImpl implements LocationService {
 
         return repository.findAll()
                 .stream()
+                .filter(location -> !location.isDeleted())
                 .map(LocationMapper::toDto)
                 .toList();
     }
+
+    @Override
+    public void delete(Long id) {
+
+        Location location = repository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Location not found"));
+
+        // ✅ Soft delete
+        softDeleteServiceImpl.softDelete(location, "admin");
+        repository.save(location);
+    }
+   
 }
