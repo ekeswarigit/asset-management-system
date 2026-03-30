@@ -1,10 +1,8 @@
 package com.asset.ams.Service.Impl;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.asset.ams.Repository.AssetRepository;
@@ -17,6 +15,8 @@ import com.asset.ams.mapper.AssetMapper;
 import com.asset.ams.model.Asset;
 import com.asset.ams.model.AssetType;
 import com.asset.ams.model.Location;
+import com.asset.ams.payload.AssetCondition;
+import com.asset.ams.payload.AssetStatus;
 
 import lombok.RequiredArgsConstructor;
 
@@ -64,8 +64,8 @@ public class AssetServiceImpl implements AssetService {
         asset.setPurchaseDate(dto.getPurchaseDate());
         asset.setWarrantyExpiry(dto.getWarrantyExpiry());
         asset.setCost(dto.getCost());
-        asset.setStatus(dto.getStatus());
-        asset.setAssetCondition(dto.getAssetCondition());
+        asset.setStatus(AssetStatus.valueOf(dto.getStatus().toUpperCase()));
+        asset.setAssetCondition(AssetCondition.valueOf(dto.getAssetCondition().toUpperCase()));
         asset.setNotes(dto.getNotes());
         asset.setAssetType(type);
         asset.setLocation(location);

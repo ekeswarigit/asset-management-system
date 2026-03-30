@@ -1,7 +1,6 @@
 package com.asset.ams.Controller;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -60,7 +59,7 @@ public class AssetController {
     }
 
     @GetMapping
-    public ApiResponse<Page<AssetResponseDto>> getAll(
+    public ApiResponse<Page<AssetResponseDto>> getAll(@RequestParam(required = false) Long id,
          @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "5") int size) {
 

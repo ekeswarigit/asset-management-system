@@ -5,13 +5,13 @@ import com.asset.ams.dto.Response.AssetResponseDto;
 import com.asset.ams.model.Asset;
 import com.asset.ams.model.AssetType;
 import com.asset.ams.model.Location;
+import com.asset.ams.payload.AssetCondition;
+import com.asset.ams.payload.AssetStatus;
 
 public class AssetMapper {
 
     // 📥 DTO → Entity
-    public static Asset toEntity(AssetRequestDto dto,
-                                 AssetType type,
-                                 Location location) {
+    public static Asset toEntity(AssetRequestDto dto, AssetType type, Location location) {
 
         Asset asset = new Asset();
 
@@ -22,8 +22,8 @@ public class AssetMapper {
         asset.setPurchaseDate(dto.getPurchaseDate());
         asset.setWarrantyExpiry(dto.getWarrantyExpiry());
         asset.setCost(dto.getCost());
-        asset.setStatus(dto.getStatus());
-        asset.setAssetCondition(dto.getAssetCondition());
+        asset.setStatus(AssetStatus.valueOf(dto.getStatus().toUpperCase()));
+        asset.setAssetCondition(AssetCondition.valueOf(dto.getAssetCondition().toUpperCase()));
         asset.setNotes(dto.getNotes());
 
         // Relationships
@@ -45,8 +45,8 @@ public class AssetMapper {
                 .purchaseDate(asset.getPurchaseDate())
                 .warrantyExpiry(asset.getWarrantyExpiry())
                 .cost(asset.getCost())
-                .status(asset.getStatus())
-                .assetCondition(asset.getAssetCondition())
+                .status(asset.getStatus().name())
+                .assetCondition(asset.getAssetCondition().name())
                 .notes(asset.getNotes())
 
                 // Show names instead of full objects

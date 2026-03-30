@@ -8,8 +8,13 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import com.asset.ams.payload.AssetCondition;
+import com.asset.ams.payload.AssetStatus;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -42,9 +47,12 @@ public class Asset {
 
     private BigDecimal cost;
 
-    private String status;     // Available, Assigned, Retired
+    @Enumerated(EnumType.STRING)
+    private AssetStatus status;     // Available, Assigned, Retired
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "asset_condition")
-    private String assetCondition;  // Good, Fair, Poor
+    private AssetCondition assetCondition;  // Good, Fair, Poor
 
     @Column(length = 1000)
     private String notes;
