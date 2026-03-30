@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.asset.ams.Repository.EmployeeRepository;
@@ -25,6 +26,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final RoleRepository roleRepository;
     private final SoftDeleteServiceImpl softDeleteServiceimpl;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public EmployeeResponseDto createEmployee(EmployeeRequestDto dto) {
@@ -33,6 +35,8 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .orElseThrow(() -> new RuntimeException("Role not found"));
 
         Employee emp = EmployeeMapper.toEntity(dto, role);
+
+        emp.setPassword(passwordEncoder.encode(emp.getPassword()));
 
         return EmployeeMapper.toDto(employeeRepository.save(emp));
     }

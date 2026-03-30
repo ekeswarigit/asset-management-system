@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.asset.ams.Service.AuthService;
 import com.asset.ams.dto.ApiResponse;
 import com.asset.ams.dto.RequestDTO.AuthRequestDto;
-import com.asset.ams.dto.RequestDTO.EmployeeRequestDto;
-import com.asset.ams.dto.RequestDTO.RegisterRequestDto;
-import com.asset.ams.dto.Response.EmployeeResponseDto;
+// import com.asset.ams.dto.RequestDTO.EmployeeRequestDto;
+// import com.asset.ams.dto.RequestDTO.RegisterRequestDto;
+// import com.asset.ams.dto.Response.EmployeeResponseDto;
 import com.asset.ams.dto.Response.LoginResponseDto;
 
 import jakarta.validation.Valid;
@@ -37,9 +37,8 @@ public class AuthController {
     //             .timestamp(LocalDateTime.now())
     //             .build();
     // }
-
 @PostMapping("/login")
-public ResponseEntity<ApiResponse<LoginResponseDto>> login(
+public ResponseEntity<ApiResponse<LoginResponseDto>> login(@Valid
         @RequestBody AuthRequestDto request) {
 
     LoginResponseDto response = authService.login(request);

@@ -3,6 +3,7 @@ package com.asset.ams.Controller;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.asset.ams.Service.AssetService;
@@ -29,26 +31,16 @@ public class AssetController {
     @PostMapping
     public ApiResponse<AssetResponseDto> create(@Valid @RequestBody AssetRequestDto dto) {
 
-        return ApiResponse.<AssetResponseDto>builder()
-                .success(true)
-                .message("Asset created successfully")
-                .data(assetService.create(dto))
-                .errorCode(0)
-                .timestamp(LocalDateTime.now())
-                .build();
+        return ApiResponse.<AssetResponseDto>builder().success(true).message("Asset created successfully")
+                .data(assetService.create(dto)).errorCode(0).timestamp(LocalDateTime.now()).build();
     }
 
     @PutMapping("/{id}")
     public ApiResponse<AssetResponseDto> update(@Valid @PathVariable Long id,
                                                 @RequestBody AssetRequestDto dto) {
 
-        return ApiResponse.<AssetResponseDto>builder()
-                .success(true)
-                .message("Asset updated successfully")
-                .data(assetService.update(id, dto))
-                .errorCode(0)
-                .timestamp(LocalDateTime.now())
-                .build();
+        return ApiResponse.<AssetResponseDto>builder().success(true).message("Asset updated successfully")
+                .data(assetService.update(id, dto)) .errorCode(0).timestamp(LocalDateTime.now()).build();
     }
 
     @DeleteMapping("/{id}")
@@ -56,48 +48,31 @@ public class AssetController {
 
         assetService.delete(id);
 
-        return ApiResponse.<String>builder()
-                .success(true)
-                .message("Asset deleted successfully")
-                .data("Deleted ID: " + id)
-                .errorCode(0)
-                .timestamp(LocalDateTime.now())
-                .build();
+        return ApiResponse.<String>builder().success(true).message("Asset deleted successfully")
+                .data("Deleted ID: " + id) .errorCode(0) .timestamp(LocalDateTime.now()).build();
     }
 
     @GetMapping("/{id}")
     public ApiResponse<AssetResponseDto> getById(@Valid @PathVariable Long id) {
 
-        return ApiResponse.<AssetResponseDto>builder()
-                .success(true)
-                .message("Asset fetched successfully")
-                .data(assetService.getById(id))
-                .errorCode(0)
-                .timestamp(LocalDateTime.now())
-                .build();
+        return ApiResponse.<AssetResponseDto>builder().success(true).message("Asset fetched successfully")
+                .data(assetService.getById(id)).errorCode(0).timestamp(LocalDateTime.now()) .build();
     }
 
     @GetMapping
-    public ApiResponse<List<AssetResponseDto>> getAll() {
+    public ApiResponse<Page<AssetResponseDto>> getAll(
+         @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "5") int size) {
 
-        return ApiResponse.<List<AssetResponseDto>>builder()
-                .success(true)
-                .message("Assets fetched successfully")
-                .data(assetService.getAll())
-                .errorCode(0)
-                .timestamp(LocalDateTime.now())
-                .build();
+        return ApiResponse.<Page<AssetResponseDto>>builder().success(true).message("Assets fetched successfully")
+                .data(assetService.getAll(page, size)).errorCode(0).timestamp(LocalDateTime.now()).build();
     }
 
-    @GetMapping("/type/{typeId}")
-    public ApiResponse<List<AssetResponseDto>> getByType(@Valid @PathVariable Long typeId) {
+    // @GetMapping("/type/{typeId}")
+    // public ApiResponse<List<AssetResponseDto>> getByType(@Valid @PathVariable Long typeId) {
 
-        return ApiResponse.<List<AssetResponseDto>>builder()
-                .success(true)
-                .message("Assets fetched by type")
-                //.data(assetService.getByAssetType(typeId))
-                .errorCode(0)
-                .timestamp(LocalDateTime.now())
-                .build();
-    }
+    //     return ApiResponse.<List<AssetResponseDto>>builder().success(true) .message("Assets fetched by type")
+    //             .data(assetService.getByAssetType(typeId))
+    //              .errorCode(0).timestamp(LocalDateTime.now()) .build();
+    // }
 }

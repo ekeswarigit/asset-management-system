@@ -1,8 +1,6 @@
 package com.asset.ams.Controller;
 
 import java.time.LocalDateTime;
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -60,7 +58,7 @@ public class EmployeeController {
                 .build();
     }
 
-    // ✅ ADMIN + EMPLOYEE
+    //  ADMIN + EMPLOYEE
     @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
     @GetMapping("/{id}")
     public ApiResponse<EmployeeResponseDto> getById(@Valid @PathVariable Long id) {
@@ -77,7 +75,7 @@ public class EmployeeController {
     // ADMIN only
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ApiResponse<EmployeeResponseDto> update(
+    public ApiResponse<EmployeeResponseDto> update(@Valid
             @PathVariable Long id,
             @RequestBody EmployeeRequestDto dto) {
 

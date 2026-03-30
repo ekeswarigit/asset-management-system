@@ -1,6 +1,10 @@
 package com.asset.ams.Service.Impl;
 
 import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.asset.ams.Repository.AssetRepository;
@@ -24,6 +28,7 @@ public class AssetServiceImpl implements AssetService {
     private final AssetRepository assetRepository;
     private final AssetTypeRepository assetTypeRepository;
     private final LocationRepository locationRepository;
+    //private final Pageable pageable;
 
      @Override
     public AssetResponseDto create(AssetRequestDto dto) {
@@ -87,12 +92,11 @@ public class AssetServiceImpl implements AssetService {
     }
 
     @Override
-    public List<AssetResponseDto> getAll() {
+    public Page<AssetResponseDto> getAll(int page, int size) {
 
-        return assetRepository.findAll()
-                .stream()
-                .map(AssetMapper::toDto)
-                .toList();
+        Pageable pageable = PageRequest.of(page, size);
+
+        return assetRepository.findAll(pageable).map(AssetMapper::toDto);
     }
 
     // @Override

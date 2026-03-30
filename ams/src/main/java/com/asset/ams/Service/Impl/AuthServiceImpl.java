@@ -44,9 +44,9 @@ public LoginResponseDto login(AuthRequestDto dto) {
             .orElseThrow(() -> new RuntimeException("Invalid email or password"));
 
     // Check soft delete
-    // if (emp.isDeleted()) {
-    //     throw new RuntimeException("User account is inactive");
-    // }
+     if (emp.isDeleted()) {
+         throw new RuntimeException("User account is inactive");
+     }
 
     // Validate password
     if (!passwordEncoder.matches(dto.getPassword(), emp.getPassword())) {
@@ -61,6 +61,6 @@ public LoginResponseDto login(AuthRequestDto dto) {
             emp.getEmail(),
             emp.getRole().getRoleName(), token
     );
-}
+ }
 }
 
