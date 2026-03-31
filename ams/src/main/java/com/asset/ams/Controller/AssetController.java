@@ -61,7 +61,7 @@ public class AssetController {
     @GetMapping
     public ApiResponse<Page<AssetResponseDto>> getAll(@RequestParam(required = false) Long id,
          @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "5") int size) {
+         @RequestParam(defaultValue = "5") int size) {
 
         return ApiResponse.<Page<AssetResponseDto>>builder().success(true).message("Assets fetched successfully")
                 .data(assetService.getAll(page, size)).errorCode(0).timestamp(LocalDateTime.now()).build();

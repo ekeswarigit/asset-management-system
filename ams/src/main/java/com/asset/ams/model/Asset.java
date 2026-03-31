@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
 
 import com.asset.ams.payload.AssetCondition;
@@ -72,7 +73,12 @@ public class Asset {
     //  Audit Fields
     @CreationTimestamp
     private LocalDateTime createdAt;
-    private LocalDateTime createdBy;
+
+    private String createdBy;   //  who created
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;   //  when updated
+
     private String updatedBy;
-    private String updatedAt;
+
 }

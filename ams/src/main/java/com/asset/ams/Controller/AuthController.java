@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.asset.ams.Service.AuthService;
 import com.asset.ams.dto.ApiResponse;
 import com.asset.ams.dto.RequestDTO.AuthRequestDto;
+import com.asset.ams.dto.RequestDTO.RegisterRequestDto;
+import com.asset.ams.dto.Response.UserResponseDto;
 // import com.asset.ams.dto.RequestDTO.EmployeeRequestDto;
 // import com.asset.ams.dto.RequestDTO.RegisterRequestDto;
 // import com.asset.ams.dto.Response.EmployeeResponseDto;
@@ -26,26 +28,32 @@ public class AuthController {
 
     private final AuthService authService;
 
-    // @PostMapping("/register")
-    // public ApiResponse<EmployeeResponseDto> register(@Valid @RequestBody RegisterRequestDto dto) {
+    @PostMapping("/register")
+    public ApiResponse<UserResponseDto> register(@Valid @RequestBody RegisterRequestDto dto) {
 
-    //     return ApiResponse.<EmployeeResponseDto>builder()
-    //             .success(true)
-    //             .message("User registered successfully")
-    //             .data(authService.registerEmployee(dto))
-    //             .errorCode(0)
-    //             .timestamp(LocalDateTime.now())
-    //             .build();
-    // }
+        return ApiResponse.<UserResponseDto>builder()
+                .success(true)
+                .message("User registered successfully")
+                .data(authService.registerUser(dto))
+                .errorCode(0)
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
 @PostMapping("/login")
-public ResponseEntity<ApiResponse<LoginResponseDto>> login(@Valid
-        @RequestBody AuthRequestDto request) {
+public ResponseEntity<ApiResponse<LoginResponseDto>> login(@Valid @RequestBody AuthRequestDto request) {
 
     LoginResponseDto response = authService.login(request);
 
     return ResponseEntity.ok(
-        new ApiResponse<>(true, "Login successful", response, 200, LocalDateTime.now())
+       ApiResponse.<LoginResponseDto>builder()
+                    .success(true)
+                    .message("Login successful")
+                    .data(response)
+                    .errorCode(0) // or 200 if you're using HTTP-like codes
+                    .timestamp(LocalDateTime.now())
+                    .build()
     );
+
 }
     
 }

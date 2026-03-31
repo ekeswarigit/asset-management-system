@@ -38,7 +38,7 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
                 "/swagger-ui/**",
                 "/swagger-ui.html"
             ).permitAll()
-            .requestMatchers("/api/auth/**", "/auth/**").permitAll()
+            .requestMatchers("/api/auth/login", "/auth/**").permitAll()
             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
             .requestMatchers("/admin/**").hasRole("ADMIN")
             .anyRequest().authenticated()

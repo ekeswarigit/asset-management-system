@@ -6,14 +6,14 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.asset.ams.model.Employee;
+import com.asset.ams.model.User;
 
 @Repository
-public interface EmployeeRepository extends JpaRepository<Employee, Long>{
+public interface UserRepository extends JpaRepository<User, Long>{
 
-    Optional<Employee> findByEmail(String email);
+    Optional<User> findByEmail(String email);
 
-    List<Employee> findByDeletedFalse();
+    List<User> findByDeletedFalse();
 
     // boolean existsByEmpName(String empName);
 

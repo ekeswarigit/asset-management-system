@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.asset.ams.Service.EmployeeService;
+import com.asset.ams.Service.UserService;
 import com.asset.ams.dto.ApiResponse;
-import com.asset.ams.dto.RequestDTO.EmployeeRequestDto;
-import com.asset.ams.dto.Response.EmployeeResponseDto;
+import com.asset.ams.dto.RequestDTO.UserRequestDto;
+import com.asset.ams.dto.Response.UserResponseDto;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,49 +24,49 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/employees")
 @RequiredArgsConstructor
-public class EmployeeController {
+public class UserController {
 
-    private final EmployeeService employeeService;
+    private final UserService userService;
 
      @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ApiResponse<EmployeeResponseDto> create(@Valid @RequestBody EmployeeRequestDto dto) {
+    public ApiResponse<UserResponseDto> create(@Valid @RequestBody UserRequestDto dto) {
 
-        return ApiResponse.<EmployeeResponseDto>builder()
+        return ApiResponse.<UserResponseDto>builder()
                 .success(true)
-                .message("Employee created")
-                .data(employeeService.createEmployee(dto))
+                .message("User created")
+                .data(userService.createUser(dto))
                 .errorCode(200)
                 .timestamp(LocalDateTime.now())
                 .build();
     }
 
-    // ADMIN + EMPLOYEE
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    // ADMIN + USER
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @GetMapping
-    public ApiResponse<Page<EmployeeResponseDto>> getAll( 
+    public ApiResponse<Page<UserResponseDto>> getAll( 
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "5") int size) {
 
-        Page<EmployeeResponseDto> data = employeeService.getAllEmployees(page, size);
-        return ApiResponse.<Page<EmployeeResponseDto>>builder()
+        Page<UserResponseDto> data = userService.getAllUser(page, size);
+        return ApiResponse.<Page<UserResponseDto>>builder()
                 .success(true)
-                .message("Employees fetched")
-                .data(employeeService.getAllEmployees(page, size))
+                .message("User fetched")
+                .data(userService.getAllUser(page, size))
                 .errorCode(0)
                 .timestamp(LocalDateTime.now())
                 .build();
     }
 
     //  ADMIN + EMPLOYEE
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @GetMapping("/{id}")
-    public ApiResponse<EmployeeResponseDto> getById(@Valid @PathVariable Long id) {
+    public ApiResponse<UserResponseDto> getById(@Valid @PathVariable Long id) {
 
-        return ApiResponse.<EmployeeResponseDto>builder()
+        return ApiResponse.<UserResponseDto>builder()
                 .success(true)
-                .message("Employee fetched")
-                .data(employeeService.getEmployeeById(id))
+                .message("User fetched")
+                .data(userService.getUserById(id))
                 .errorCode(0)
                 .timestamp(LocalDateTime.now())
                 .build();
@@ -75,14 +75,14 @@ public class EmployeeController {
     // ADMIN only
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ApiResponse<EmployeeResponseDto> update(@Valid
+    public ApiResponse<UserResponseDto> update(@Valid
             @PathVariable Long id,
-            @RequestBody EmployeeRequestDto dto) {
+            @RequestBody UserRequestDto dto) {
 
-        return ApiResponse.<EmployeeResponseDto>builder()
+        return ApiResponse.<UserResponseDto>builder()
                 .success(true)
-                .message("Employee updated")
-                .data(employeeService.updateEmployee(id, dto))
+                .message("User updated")
+                .data(userService.updateUser(id, dto))
                 .errorCode(0)
                 .timestamp(LocalDateTime.now())
                 .build();
@@ -93,11 +93,11 @@ public class EmployeeController {
     @DeleteMapping("/{id}")
     public ApiResponse<String> delete(@Valid @PathVariable Long id) {
 
-        employeeService.deleteEmployee(id);
+        userService.deleteUser(id);
 
         return ApiResponse.<String>builder()
                 .success(true)
-                .message("Employee deleted")
+                .message("User deleted")
                 .data("Deleted ID: " + id)
                 .errorCode(0)
                 .timestamp(LocalDateTime.now())

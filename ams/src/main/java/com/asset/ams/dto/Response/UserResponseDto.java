@@ -5,10 +5,10 @@ import lombok.Data;
 
 @Data
 @Builder
-public class EmployeeResponseDto {
+public class UserResponseDto {
 
-    private Long empId;
-    private String empName;
+    private Long userId;
+    private String userName;
     private String email;
     private String roleName;
 }
