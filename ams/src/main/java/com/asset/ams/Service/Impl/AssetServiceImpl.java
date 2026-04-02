@@ -3,12 +3,14 @@ package com.asset.ams.Service.Impl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.asset.ams.Repository.AssetRepository;
 import com.asset.ams.Repository.AssetTypeRepository;
 import com.asset.ams.Repository.LocationRepository;
 import com.asset.ams.Service.AssetService;
+import com.asset.ams.Specification.AssetSpecification;
 import com.asset.ams.dto.RequestDTO.AssetRequestDto;
 import com.asset.ams.dto.Response.AssetResponseDto;
 import com.asset.ams.mapper.AssetMapper;
@@ -92,9 +94,11 @@ public class AssetServiceImpl implements AssetService {
     }
 
     @Override
-    public Page<AssetResponseDto> getAll(int page, int size) {
+    public Page<AssetResponseDto> getAll( String keyword, AssetStatus status,  AssetCondition condition,int page, int size) {
 
         Pageable pageable = PageRequest.of(page, size);
+
+        Specification<Asset> spec = AssetSpecification.filterAssets(keyword, status, condition);
 
         return assetRepository.findAll(pageable).map(AssetMapper::toDto);
     }

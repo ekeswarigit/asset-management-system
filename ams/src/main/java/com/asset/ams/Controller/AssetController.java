@@ -17,6 +17,8 @@ import com.asset.ams.Service.AssetService;
 import com.asset.ams.dto.ApiResponse;
 import com.asset.ams.dto.RequestDTO.AssetRequestDto;
 import com.asset.ams.dto.Response.AssetResponseDto;
+import com.asset.ams.payload.AssetCondition;
+import com.asset.ams.payload.AssetStatus;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -59,12 +61,15 @@ public class AssetController {
     }
 
     @GetMapping
-    public ApiResponse<Page<AssetResponseDto>> getAll(@RequestParam(required = false) Long id,
+    public ApiResponse<Page<AssetResponseDto>> getAll(
+         @RequestParam(required = false) String keyword,
+         @RequestParam(required = false) AssetStatus status,
+         @RequestParam(required = false) AssetCondition condition,
          @RequestParam(defaultValue = "0") int page,
          @RequestParam(defaultValue = "5") int size) {
 
         return ApiResponse.<Page<AssetResponseDto>>builder().success(true).message("Assets fetched successfully")
-                .data(assetService.getAll(page, size)).errorCode(0).timestamp(LocalDateTime.now()).build();
+                .data(assetService.getAll(keyword,status,condition,page, size)).errorCode(0).timestamp(LocalDateTime.now()).build();
     }
 
     // @GetMapping("/type/{typeId}")

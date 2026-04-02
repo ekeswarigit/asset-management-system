@@ -6,6 +6,8 @@ import org.springframework.data.domain.Page;
 
 import com.asset.ams.dto.RequestDTO.AssetRequestDto;
 import com.asset.ams.dto.Response.AssetResponseDto;
+import com.asset.ams.payload.AssetCondition;
+import com.asset.ams.payload.AssetStatus;
 
 public interface AssetService {
 
@@ -17,7 +19,7 @@ public interface AssetService {
 
     AssetResponseDto getById(Long id);
 
-    Page<AssetResponseDto> getAll(int page, int size);
+    Page<AssetResponseDto> getAll( String keyword,AssetStatus status, AssetCondition condition,int page, int size);
 
   //  List<AssetResponseDto> getByAssetType(Long typeId);
 
