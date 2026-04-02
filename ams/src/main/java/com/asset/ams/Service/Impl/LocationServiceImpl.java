@@ -78,5 +78,6 @@ public class LocationServiceImpl implements LocationService {
         softDeleteServiceImpl.softDelete(location, "admin");
         repository.save(location);
     }
+    
    
 }

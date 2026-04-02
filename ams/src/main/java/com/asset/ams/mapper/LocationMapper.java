@@ -10,6 +10,8 @@ public class LocationMapper {
         Location loc = new Location();
         loc.setLocationName(dto.getLocationName());
         loc.setDescription(dto.getDescription());
+        loc.setLatitude(dto.getLatitude());
+        loc.setLongitude(dto.getLongitude());
         return loc;
     }
 

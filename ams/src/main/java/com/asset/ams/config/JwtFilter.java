@@ -46,10 +46,10 @@ public class JwtFilter extends OncePerRequestFilter {
 
             String username = jwtUtil.extractUsername(token);
 
-            // ✅ ADD THIS LINE (get role from token)
+            //  ADD THIS LINE (get role from token)
             String role = jwtUtil.extractRole(token);
 
-            // ✅ ADD ROLE HERE
+            //  ADD ROLE HERE
             UsernamePasswordAuthenticationToken auth =
                     new UsernamePasswordAuthenticationToken(
                             username,

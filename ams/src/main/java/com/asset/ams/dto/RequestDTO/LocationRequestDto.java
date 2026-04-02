@@ -10,4 +10,8 @@ public class LocationRequestDto {
     private String locationName;
 
     private String description;
+    
+    private Double latitude;
+    private Double longitude;
+
 }

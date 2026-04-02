@@ -28,17 +28,17 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping("/register")
-    public ApiResponse<UserResponseDto> register(@Valid @RequestBody RegisterRequestDto dto) {
+    // @PostMapping("/register")
+    // public ApiResponse<UserResponseDto> register(@Valid @RequestBody RegisterRequestDto dto) {
 
-        return ApiResponse.<UserResponseDto>builder()
-                .success(true)
-                .message("User registered successfully")
-                .data(authService.registerUser(dto))
-                .errorCode(0)
-                .timestamp(LocalDateTime.now())
-                .build();
-    }
+    //     return ApiResponse.<UserResponseDto>builder()
+    //             .success(true)
+    //             .message("User registered successfully")
+    //             .data(authService.registerUser(dto))
+    //             .errorCode(0)
+    //             .timestamp(LocalDateTime.now())
+    //             .build();
+    // }
 @PostMapping("/login")
 public ResponseEntity<ApiResponse<LoginResponseDto>> login(@Valid @RequestBody AuthRequestDto request) {
 

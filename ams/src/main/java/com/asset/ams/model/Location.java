@@ -27,6 +27,9 @@ public class Location extends BaseEntity{
 
     private String description;
 
+    private Double latitude;
+    private Double longitude;
+
     // @OneToMany(mappedBy = "location")
     // private List<Asset> assets;
 }
