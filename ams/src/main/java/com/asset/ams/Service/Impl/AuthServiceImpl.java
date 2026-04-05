@@ -1,7 +1,6 @@
 package com.asset.ams.Service.Impl;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.asset.ams.Repository.RoleRepository;
@@ -27,17 +26,17 @@ public class AuthServiceImpl implements AuthService{
     private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder encoder;
 
-    // @Override
-    //  public UserResponseDto registerUser(RegisterRequestDto dto) {
+    @Override
+     public UserResponseDto registerUser(RegisterRequestDto dto) {
+                                  //(  "USER")
+        Role role = roleRepository.findByRoleName(dto.getRole().toUpperCase())
+            .orElseThrow(() -> new RuntimeException("Role not found"));
 
-    //     Role role = roleRepository.findByRoleName("USER")
-    //         .orElseThrow(() -> new RuntimeException("Role not found"));
-
-    //     User user = UserMapper.fromRegisterDto(dto, role);
-    //     user.setPassword(encoder.encode(user.getPassword()));
-    //     User savedUser = userRepository.save(user);
-    //     return UserMapper.toDto(savedUser);
-    // }
+        User user = UserMapper.fromRegisterDto(dto, role);
+        user.setPassword(encoder.encode(user.getPassword()));
+        User savedUser = userRepository.save(user);
+        return UserMapper.toDto(savedUser);
+    }
 @Override
 public LoginResponseDto login(AuthRequestDto dto) {
 

@@ -7,7 +7,7 @@ import com.asset.ams.dto.Response.UserResponseDto;
 
 public interface AuthService {
 
-   // UserResponseDto registerUser(RegisterRequestDto dto);
+    UserResponseDto registerUser(RegisterRequestDto dto);
     
     LoginResponseDto login(AuthRequestDto dto);
 }

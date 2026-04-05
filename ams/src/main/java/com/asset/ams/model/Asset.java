@@ -11,7 +11,6 @@ import org.hibernate.annotations.Where;
 
 import com.asset.ams.payload.AssetCondition;
 import com.asset.ams.payload.AssetStatus;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -21,17 +20,19 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@SQLDelete(sql = "UPDATE asset SET deleted = true WHERE asset_id = ?")
-@Where(clause = "deleted = false")
+// @SQLDelete(sql = "UPDATE asset SET deleted = true WHERE asset_id = ?")
+// @Where(clause = "deleted = false")
 @NoArgsConstructor
-public class Asset {
+@AllArgsConstructor
+public class Asset extends BaseEntity{
 
-    @Id
+    @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long assetId;
 
@@ -67,18 +68,18 @@ public class Asset {
     @JoinColumn(name = "location_id")
     private Location location;
 
-    @Column(nullable = false)
-    private boolean deleted = false;
+    // @Column(nullable = false)
+    // private boolean deleted = false;
 
     //  Audit Fields
-    @CreationTimestamp
-    private LocalDateTime createdAt;
+    // @CreationTimestamp
+    // private LocalDateTime createdAt;
 
-    private String createdBy;   //  who created
+    // private String createdBy;   //  who created
 
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;   //  when updated
+    // @UpdateTimestamp
+    // private LocalDateTime updatedAt;   //  when updated
 
-    private String updatedBy;
+    // private String updatedBy;
 
 }

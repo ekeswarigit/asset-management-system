@@ -1,13 +1,14 @@
 package com.asset.ams.Specification;
-
 import java.util.ArrayList;
 import java.util.List;
-import jakarta.persistence.criteria.Predicate;
+
 import org.springframework.data.jpa.domain.Specification;
 
 import com.asset.ams.model.Asset;
 import com.asset.ams.payload.AssetCondition;
 import com.asset.ams.payload.AssetStatus;
+
+import jakarta.persistence.criteria.Predicate;
 
 public class AssetSpecification {
 
@@ -25,8 +26,9 @@ public class AssetSpecification {
                 Predicate name = cb.like(cb.lower(root.get("assetName")), "%" + keyword.toLowerCase() + "%");
                 Predicate brand = cb.like(cb.lower(root.get("brand")), "%" + keyword.toLowerCase() + "%");
                 Predicate model = cb.like(cb.lower(root.get("model")), "%" + keyword.toLowerCase() + "%");
-
-                predicates.add(cb.or(name, brand, model));
+                Predicate serial = cb.like(cb.lower(root.get("serialNumber")), "%" + keyword.toLowerCase() + "%");
+                
+                predicates.add(cb.or(name, brand, model, serial));
             }
 
             // 🎯 Filter - Status
@@ -36,9 +38,9 @@ public class AssetSpecification {
 
             // 🎯 Filter - Condition
             if (condition != null) {
-                predicates.add(cb.equal(root.get("condition"), condition));
+                predicates.add(cb.equal(root.get("assetCondition"), condition));
             }
-
+            predicates.add(cb.equal(root.get("deleted"), false));
             return cb.and(predicates.toArray(new Predicate[0]));
         };
     }
