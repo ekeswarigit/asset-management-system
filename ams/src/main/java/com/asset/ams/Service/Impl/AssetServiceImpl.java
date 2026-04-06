@@ -11,14 +11,18 @@ import org.springframework.stereotype.Service;
 import com.asset.ams.Repository.AssetRepository;
 import com.asset.ams.Repository.AssetTypeRepository;
 import com.asset.ams.Repository.LocationRepository;
+import com.asset.ams.Repository.UserRepository;
 import com.asset.ams.Service.AssetService;
 import com.asset.ams.Specification.AssetSpecification;
 import com.asset.ams.dto.RequestDTO.AssetRequestDto;
+import com.asset.ams.dto.RequestDTO.AssignRequestDto;
 import com.asset.ams.dto.Response.AssetResponseDto;
+import com.asset.ams.dto.Response.AssignResponseDto;
 import com.asset.ams.mapper.AssetMapper;
 import com.asset.ams.model.Asset;
 import com.asset.ams.model.AssetType;
 import com.asset.ams.model.Location;
+import com.asset.ams.model.User;
 import com.asset.ams.payload.AssetCondition;
 import com.asset.ams.payload.AssetStatus;
 
@@ -32,6 +36,7 @@ public class AssetServiceImpl implements AssetService {
     private final AssetRepository assetRepository;
     private final AssetTypeRepository assetTypeRepository;
     private final LocationRepository locationRepository;
+    private final UserRepository userRepository;
     //private final Pageable pageable;
 
      @Override
@@ -105,9 +110,31 @@ public class AssetServiceImpl implements AssetService {
 
         Specification<Asset> spec = AssetSpecification.filterAssets(keyword, status, condition);
 
-        return assetRepository.findAll(pageable).map(AssetMapper::toDto);
+        //return assetRepository.findAll(pageable).map(AssetMapper::toDto);
+        return assetRepository.findAll(spec, pageable).map(AssetMapper::toDto);
     }
 
+    public AssignResponseDto assignAsset(AssignRequestDto dto) {
+
+          Asset asset = assetRepository.findById(dto.getAssetId())
+            .orElseThrow(() -> new RuntimeException("Asset not found"));
+
+          User user = userRepository.findById(dto.getUserId())
+            .orElseThrow(() -> new RuntimeException("User not found"));
+
+            // validation
+            if (asset.getAssignedTo() != null) {
+                throw new RuntimeException("Asset already assigned");
+            }
+
+            asset.setAssignedTo(user);
+            asset.setStatus(AssetStatus.ASSIGNED);
+
+            assetRepository.save(asset);
+
+            return AssetMapper.toAssignDto(asset);
+    }
+    
     // @Override
     // public List<AssetResponseDto> getByAssetType(Long typeId) {
     //     return assetRepository.findByAssetTypeTypeId(typeId)

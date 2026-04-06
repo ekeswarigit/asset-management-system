@@ -2,6 +2,7 @@ package com.asset.ams.mapper;
 
 import com.asset.ams.dto.RequestDTO.AssetRequestDto;
 import com.asset.ams.dto.Response.AssetResponseDto;
+import com.asset.ams.dto.Response.AssignResponseDto;
 import com.asset.ams.model.Asset;
 import com.asset.ams.model.AssetType;
 import com.asset.ams.model.Location;
@@ -52,8 +53,23 @@ public class AssetMapper {
                 // Show names instead of full objects
                 .assetTypeName(asset.getAssetType().getTypeName())
                 .locationName(asset.getLocation().getLocationName())
+                .assignedUserName(asset.getAssignedTo() != null ? asset.getAssignedTo().getUserName() : null)
 
                 .build();
     }
+
+        //  Entity → Assign Response DTO
+        public static AssignResponseDto toAssignDto(Asset asset) {
+
+            return AssignResponseDto.builder()
+                    .assetId(asset.getAssetId())
+                    .assetName(asset.getAssetName())
+
+                    .userId(asset.getAssignedTo() != null ? asset.getAssignedTo().getUserId() : null)
+                    .userName(asset.getAssignedTo() != null ? asset.getAssignedTo().getUserName() : null)
+
+                    .status(asset.getStatus() != null ? asset.getStatus().getValue() : null)
+                    .build();
+        }
 }  
     

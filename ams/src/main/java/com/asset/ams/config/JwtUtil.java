@@ -15,7 +15,7 @@ import io.jsonwebtoken.security.Keys;
 public class JwtUtil {
 
        private static final String SECRET = "mysecretkeymysecretkeymysecretkey123";
-       private static final long EXPIRATION = 1000 * 60 * 60; // 1 hour
+       private static final long EXPIRATION = 1000 * 60 * 60 * 10; // 10 hour
 
     private Key getSignKey() {
         return Keys.hmacShaKeyFor(SECRET.getBytes());

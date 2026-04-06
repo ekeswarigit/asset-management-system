@@ -28,4 +28,5 @@ public class AssetResponseDto {
 
     private String assetTypeName;
     private String locationName;
+    private String assignedUserName;
 }

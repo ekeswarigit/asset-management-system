@@ -3,6 +3,7 @@ package com.asset.ams.Controller;
 import java.time.LocalDateTime;
 
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,7 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.asset.ams.Service.AssetService;
 import com.asset.ams.dto.ApiResponse;
 import com.asset.ams.dto.RequestDTO.AssetRequestDto;
+import com.asset.ams.dto.RequestDTO.AssignRequestDto;
 import com.asset.ams.dto.Response.AssetResponseDto;
+import com.asset.ams.dto.Response.AssignResponseDto;
+import com.asset.ams.model.Asset;
+import com.asset.ams.model.User;
 import com.asset.ams.payload.AssetCondition;
 import com.asset.ams.payload.AssetStatus;
 
@@ -72,6 +77,11 @@ public class AssetController {
                 .data(assetService.getAll(keyword,status,condition,page, size)).errorCode(0).timestamp(LocalDateTime.now()).build();
     }
 
+    @PostMapping("/assign")
+    public ApiResponse<AssignResponseDto> assignAsset(@RequestBody AssignRequestDto dto) {
+          return ApiResponse.<AssignResponseDto>builder().success(true).message("Assets Assigned successfully")
+                .data(assetService.assignAsset(dto)).errorCode(0).timestamp(LocalDateTime.now()).build();
+    }
     // @GetMapping("/type/{typeId}")
     // public ApiResponse<List<AssetResponseDto>> getByType(@Valid @PathVariable Long typeId) {
 
