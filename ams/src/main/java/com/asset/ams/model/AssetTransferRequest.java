@@ -1,9 +1,7 @@
 package com.asset.ams.model;
 
 import java.time.LocalDateTime;
-
 import com.asset.ams.payload.TransferStatus;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -27,12 +25,12 @@ public class AssetTransferRequest extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long atrid;
 
-    // 🔗 Asset
+    //  Asset
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "asset_id")
     private Asset asset;
 
-    // 🔗 Locations
+    //  Locations
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "from_location_id")
     private Location fromLocation;
@@ -41,7 +39,7 @@ public class AssetTransferRequest extends BaseEntity {
     @JoinColumn(name = "to_location_id")
     private Location toLocation;
 
-    // 🔗 Users
+    //  Users
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "requested_by")
     private User requestedBy;
