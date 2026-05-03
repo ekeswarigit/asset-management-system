@@ -1,7 +1,6 @@
 package com.asset.ams.config;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,7 +26,7 @@ public class JwtFilter extends OncePerRequestFilter {
                                    HttpServletResponse response,
                                    FilterChain filterChain)
             throws ServletException, IOException {
-
+        System.out.println("🔥 JWT FILTER HIT");
         if (request.getMethod().equalsIgnoreCase("OPTIONS")) {
             filterChain.doFilter(request, response);
             return;
@@ -45,10 +44,11 @@ public class JwtFilter extends OncePerRequestFilter {
         if (jwtUtil.validateToken(token)) {
 
             String username = jwtUtil.extractUsername(token);
-
+           System.out.println("JWT FILTER HIT");
             //  ADD THIS LINE (get role from token)
             String role = jwtUtil.extractRole(token);
-
+            System.out.println("ROLE FROM TOKEN: " + role);
+            role = role.trim().toUpperCase();
             //  ADD ROLE HERE
             UsernamePasswordAuthenticationToken auth =
                     new UsernamePasswordAuthenticationToken(
@@ -58,6 +58,7 @@ public class JwtFilter extends OncePerRequestFilter {
                     );
 
             SecurityContextHolder.getContext().setAuthentication(auth);
+            System.out.println("ROLE FROM TOKEN: " + role);
         }
 
         filterChain.doFilter(request, response);

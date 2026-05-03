@@ -23,7 +23,7 @@ public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
     private final CorsConfigurationSource corsConfigurationSource;
-   @Bean
+@Bean
 public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
     http
@@ -32,12 +32,21 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         .authorizeHttpRequests(auth -> auth
 
             //  allow swagger
-            .requestMatchers( "/v3/api-docs/**",
-                              "/swagger-ui/**",
-                             "/swagger-ui.html"  ).permitAll()
-            .requestMatchers("/api/auth/login", "/auth/**","/api/auth/register").permitAll()
-            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+            .requestMatchers("/v3/api-docs/**",
+                             "/swagger-ui/**",
+                             "/swagger-ui.html").permitAll()
+            // Auth
+            .requestMatchers("/api/auth/login",
+                             "/api/auth/register").permitAll()
+            // OPTIONS
+            .requestMatchers(HttpMethod.OPTIONS, "/api/**").permitAll()
+            //  GET users → allow ADMIN + USER
+            .requestMatchers(HttpMethod.GET, "/api/users").hasAnyRole("ADMIN", "USER")
+            //  CREATE user → ADMIN only
+            .requestMatchers(HttpMethod.POST, "/api/users").hasRole("ADMIN")
+            // Admin routes
             .requestMatchers("/admin/**").hasRole("ADMIN")
+            // Everything else
             .anyRequest().authenticated()
         );
 
