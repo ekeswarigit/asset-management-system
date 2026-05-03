@@ -15,7 +15,7 @@ public interface AssetService {
 
    AssetResponseDto create(AssetRequestDto dto);
 
-    AssetResponseDto update(Long id, AssetRequestDto dto);
+   AssetResponseDto update(Long id, AssetRequestDto dto);
 
     void delete(Long id);
 

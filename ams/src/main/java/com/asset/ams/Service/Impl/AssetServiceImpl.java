@@ -37,7 +37,7 @@ public class AssetServiceImpl implements AssetService {
     private final UserRepository userRepository;
     //private final Pageable pageable;
 
-     @Override
+    @Override
     public AssetResponseDto create(AssetRequestDto dto) {
 
         AssetType type = assetTypeRepository.findById(dto.getTypeId())
