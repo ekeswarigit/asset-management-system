@@ -29,4 +29,7 @@ public class AssetResponseDto {
     private String assetTypeName;
     private String locationName;
     private String assignedUserName;
+
+    private Long typeId;
+    private Long locationId;
 }

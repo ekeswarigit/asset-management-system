@@ -30,7 +30,6 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         .cors(cors -> cors.configurationSource(corsConfigurationSource))
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> auth
-
             //  allow swagger
             .requestMatchers("/v3/api-docs/**",
                              "/swagger-ui/**",
@@ -44,6 +43,8 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
             .requestMatchers(HttpMethod.GET, "/api/users").hasAnyRole("ADMIN", "USER")
             //  CREATE user → ADMIN only
             .requestMatchers(HttpMethod.POST, "/api/users").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.PUT, "/api/users").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.DELETE, "/api/users").hasRole("ADMIN")
             // Admin routes
             .requestMatchers("/admin/**").hasRole("ADMIN")
             // Everything else

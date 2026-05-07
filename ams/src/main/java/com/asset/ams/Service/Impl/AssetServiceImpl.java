@@ -14,6 +14,7 @@ import com.asset.ams.Service.AssetService;
 import com.asset.ams.Specification.AssetSpecification;
 import com.asset.ams.dto.RequestDTO.AssetRequestDto;
 import com.asset.ams.dto.RequestDTO.AssignRequestDto;
+import com.asset.ams.dto.RequestDTO.UnassignRequestDto;
 import com.asset.ams.dto.Response.AssetResponseDto;
 import com.asset.ams.dto.Response.AssignResponseDto;
 import com.asset.ams.mapper.AssetMapper;
@@ -97,18 +98,15 @@ public class AssetServiceImpl implements AssetService {
 
         Asset asset = assetRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Asset not found"));
-
         return AssetMapper.toDto(asset);
     }
 
     @Override
-    public Page<AssetResponseDto> getAll( String keyword, AssetStatus status,  AssetCondition condition,int page, int size) {
+    public Page<AssetResponseDto> getAll( String keyword, AssetStatus status, AssetCondition condition, Long typeId, int page, int size) {
 
         Pageable pageable = PageRequest.of(page, size);
 
-        Specification<Asset> spec = AssetSpecification.filterAssets(keyword, status, condition);
-
-        //return assetRepository.findAll(pageable).map(AssetMapper::toDto);
+        Specification<Asset> spec = AssetSpecification.filterAssets(keyword, status, condition, typeId);
         return assetRepository.findAll(spec, pageable).map(AssetMapper::toDto);
     }
 
@@ -122,17 +120,33 @@ public class AssetServiceImpl implements AssetService {
 
             // validation
             if (asset.getAssignedTo() != null) {
-                throw new RuntimeException("Asset already assigned");
+                throw new RuntimeException("Asset already assigned"+ asset.getAssignedTo().getUserName());
             }
+            
+            if (asset.getStatus() == AssetStatus.RETIRED)
+               throw new RuntimeException("Cannot assign a retired asset");
 
             asset.setAssignedTo(user);
             asset.setStatus(AssetStatus.ASSIGNED);
 
             assetRepository.save(asset);
-
             return AssetMapper.toAssignDto(asset);
     }
     
+    @Override
+    public AssignResponseDto unassignAsset(UnassignRequestDto dto) {
+        Asset asset = assetRepository.findById(dto.getAssetId())
+                .orElseThrow(() -> new RuntimeException("Asset not found"));
+ 
+        if (asset.getAssignedTo() == null)
+            throw new RuntimeException("Asset is not currently assigned");
+ 
+        asset.setAssignedTo(null);
+        asset.setStatus(AssetStatus.AVAILABLE);
+        assetRepository.save(asset);
+ 
+        return AssetMapper.toAssignDto(asset);
+    }
     // @Override
     // public List<AssetResponseDto> getByAssetType(Long typeId) {
     //     return assetRepository.findByAssetTypeTypeId(typeId)

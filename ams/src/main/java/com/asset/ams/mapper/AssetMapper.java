@@ -50,9 +50,12 @@ public class AssetMapper {
                 .assetCondition(asset.getAssetCondition().name())
                 .notes(asset.getNotes())
 
-                // Show names instead of full objects
-                .assetTypeName(asset.getAssetType().getTypeName())
-                .locationName(asset.getLocation().getLocationName())
+                .assetTypeName(asset.getAssetType() != null ? asset.getAssetType().getTypeName() : null)
+                .typeId(asset.getAssetType() != null ? asset.getAssetType().getTypeId() : null)
+
+                .locationName(asset.getLocation() != null ? asset.getLocation().getLocationName() : null)
+                .locationId(asset.getLocation() != null ? asset.getLocation().getLocationId() : null)
+
                 .assignedUserName(asset.getAssignedTo() != null ? asset.getAssignedTo().getUserName() : null)
 
                 .build();

@@ -43,9 +43,9 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if (jwtUtil.validateToken(token)) {
 
-            String username = jwtUtil.extractUsername(token);
-           System.out.println("JWT FILTER HIT");
-            //  ADD THIS LINE (get role from token)
+           String username = jwtUtil.extractUsername(token);
+          // System.out.println("JWT FILTER HIT");
+            
             String role = jwtUtil.extractRole(token);
             System.out.println("ROLE FROM TOKEN: " + role);
             role = role.trim().toUpperCase();
@@ -62,5 +62,9 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+
+       // String role = jwtUtil.extractRole(token);
+      
     }
+    
 }

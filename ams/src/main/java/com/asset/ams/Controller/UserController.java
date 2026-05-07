@@ -29,7 +29,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping
     public ApiResponse<UserResponseDto> create(@Valid @RequestBody UserRequestDto dto) {
 
@@ -43,7 +43,7 @@ public class UserController {
     }
 
     // ADMIN + USER
-    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER')")
     @GetMapping
     public ApiResponse<Page<UserResponseDto>> getAll( 
         @RequestParam(defaultValue = "0") int page,
@@ -60,7 +60,7 @@ public class UserController {
     }
 
     //  ADMIN + EMPLOYEE
-    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     @GetMapping("/{id}")
     public ApiResponse<UserResponseDto> getById(@Valid @PathVariable Long id) {
 
@@ -72,9 +72,8 @@ public class UserController {
                 .timestamp(LocalDateTime.now())
                 .build();
     }
-
-    // ADMIN only
-    @PreAuthorize("hasRole('ADMIN')")
+    // ADMIN only 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PutMapping("/{id}")
     public ApiResponse<UserResponseDto> update(@Valid
             @PathVariable Long id,
@@ -88,9 +87,8 @@ public class UserController {
                 .timestamp(LocalDateTime.now())
                 .build();
     }
-
     //  ADMIN only
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ApiResponse<String> delete(@Valid @PathVariable Long id) {
 

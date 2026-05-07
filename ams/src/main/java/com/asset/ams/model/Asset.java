@@ -73,6 +73,8 @@ public class Asset extends BaseEntity{
     @JoinColumn(name = "assigned_to")
     private User assignedTo;
 
+    private String imagePath;
+
     // @Column(nullable = false)
     // private boolean deleted = false;
 
