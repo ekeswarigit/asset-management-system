@@ -32,4 +32,6 @@ public class AssetResponseDto {
 
     private Long typeId;
     private Long locationId;
+
+    private String imageUrl;
 }

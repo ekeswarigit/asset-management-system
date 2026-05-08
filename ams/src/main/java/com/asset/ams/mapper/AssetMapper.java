@@ -57,7 +57,9 @@ public class AssetMapper {
                 .locationId(asset.getLocation() != null ? asset.getLocation().getLocationId() : null)
 
                 .assignedUserName(asset.getAssignedTo() != null ? asset.getAssignedTo().getUserName() : null)
-
+                .imageUrl(asset.getImagePath() != null
+                ? "http://localhost:8080/uploads/assets/" + asset.getImagePath()
+                : null)
                 .build();
     }
 

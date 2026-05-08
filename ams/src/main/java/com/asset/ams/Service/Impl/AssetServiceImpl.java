@@ -1,16 +1,20 @@
 package com.asset.ams.Service.Impl;
 
+import java.io.IOException;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.asset.ams.Repository.AssetRepository;
 import com.asset.ams.Repository.AssetTypeRepository;
 import com.asset.ams.Repository.LocationRepository;
 import com.asset.ams.Repository.UserRepository;
 import com.asset.ams.Service.AssetService;
+import com.asset.ams.Service.FileStorageService;
 import com.asset.ams.Specification.AssetSpecification;
 import com.asset.ams.dto.RequestDTO.AssetRequestDto;
 import com.asset.ams.dto.RequestDTO.AssignRequestDto;
@@ -36,6 +40,7 @@ public class AssetServiceImpl implements AssetService {
     private final AssetTypeRepository assetTypeRepository;
     private final LocationRepository locationRepository;
     private final UserRepository userRepository;
+    private final FileStorageService fileStorageService;
     //private final Pageable pageable;
 
     @Override
@@ -146,6 +151,67 @@ public class AssetServiceImpl implements AssetService {
         assetRepository.save(asset);
  
         return AssetMapper.toAssignDto(asset);
+    }
+
+    @Override
+    public AssetResponseDto create(AssetRequestDto dto, MultipartFile image) {
+            AssetType type = assetTypeRepository.findById(dto.getTypeId())
+                    .orElseThrow(() -> new RuntimeException("Type not found"));
+            Location location = locationRepository.findById(dto.getLocationId())
+                    .orElseThrow(() -> new RuntimeException("Location not found"));
+
+            Asset asset = AssetMapper.toEntity(dto, type, location);
+
+            // ✅ save image if provided
+            if (image != null && !image.isEmpty()) {
+                try {
+                    String fileName = fileStorageService.store(image);
+                    asset.setImagePath(fileName);
+                } catch (IOException e) {
+                    throw new RuntimeException("Failed to store image", e);
+                }
+            }
+
+            return AssetMapper.toDto(assetRepository.save(asset));
+    }
+
+    @Override
+    public AssetResponseDto update(Long id, AssetRequestDto dto, MultipartFile image) {
+            Asset asset = assetRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Asset not found"));
+
+            AssetType type = assetTypeRepository.findById(dto.getTypeId())
+                    .orElseThrow(() -> new RuntimeException("Type not found"));
+            Location location = locationRepository.findById(dto.getLocationId())
+                    .orElseThrow(() -> new RuntimeException("Location not found"));
+
+            // update fields
+            asset.setAssetName(dto.getAssetName());
+            asset.setSerialNumber(dto.getSerialNumber());
+            asset.setBrand(dto.getBrand());
+            asset.setModel(dto.getModel());
+            asset.setPurchaseDate(dto.getPurchaseDate());
+            asset.setWarrantyExpiry(dto.getWarrantyExpiry());
+            asset.setCost(dto.getCost());
+            asset.setStatus(AssetStatus.valueOf(dto.getStatus().toUpperCase()));
+            asset.setAssetCondition(AssetCondition.valueOf(dto.getAssetCondition().toUpperCase()));
+            asset.setNotes(dto.getNotes());
+            asset.setAssetType(type);
+            asset.setLocation(location);
+
+            // ✅ update image if new one provided
+            if (image != null && !image.isEmpty()) {
+                try {
+                    // delete old image
+                    fileStorageService.delete(asset.getImagePath());
+                    String fileName = fileStorageService.store(image);
+                    asset.setImagePath(fileName);
+                } catch (IOException e) {
+                    throw new RuntimeException("Failed to store image", e);
+                }
+            }
+
+            return AssetMapper.toDto(assetRepository.save(asset));
     }
     // @Override
     // public List<AssetResponseDto> getByAssetType(Long typeId) {

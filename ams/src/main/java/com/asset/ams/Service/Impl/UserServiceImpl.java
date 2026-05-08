@@ -1,7 +1,5 @@
 package com.asset.ams.Service.Impl;
-
 import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -42,7 +40,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<UserResponseDto> getAllUser(int page, int size) {
+    public Page<UserResponseDto> getAllUser(int page, int size, String search,String role) {
 
          Pageable pageable = PageRequest.of(page, size);
 

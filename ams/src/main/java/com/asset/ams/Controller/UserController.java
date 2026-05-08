@@ -47,13 +47,15 @@ public class UserController {
     @GetMapping
     public ApiResponse<Page<UserResponseDto>> getAll( 
         @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "5") int size) {
+        @RequestParam(defaultValue = "5") int size,
+        @RequestParam(required = false) String search,
+        @RequestParam(required = false) String role) {
 
-        Page<UserResponseDto> data = userService.getAllUser(page, size);
+        Page<UserResponseDto> data = userService.getAllUser(page, size, search, role);
         return ApiResponse.<Page<UserResponseDto>>builder()
                 .success(true)
                 .message("User fetched")
-                .data(userService.getAllUser(page, size))
+                .data(userService.getAllUser(page, size, search, role))
                 .errorCode(0)
                 .timestamp(LocalDateTime.now())
                 .build();

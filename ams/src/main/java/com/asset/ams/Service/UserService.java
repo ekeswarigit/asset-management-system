@@ -9,7 +9,7 @@ public interface UserService {
 
     UserResponseDto createUser(UserRequestDto dto);
 
-    Page<UserResponseDto> getAllUser(int page, int size);
+    Page<UserResponseDto> getAllUser(int page, int size, String search,String role);
 
     UserResponseDto getUserById(Long id);
 

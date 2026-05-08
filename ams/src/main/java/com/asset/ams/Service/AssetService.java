@@ -1,6 +1,7 @@
 package com.asset.ams.Service;
 
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.asset.ams.dto.RequestDTO.AssetRequestDto;
 import com.asset.ams.dto.RequestDTO.AssignRequestDto;
@@ -25,6 +26,9 @@ public interface AssetService {
     AssignResponseDto assignAsset(AssignRequestDto dto);
 
     AssignResponseDto unassignAsset(UnassignRequestDto dto);
+
+    AssetResponseDto create(AssetRequestDto dto, MultipartFile image);
+    AssetResponseDto update(Long id, AssetRequestDto dto, MultipartFile image);
 
   //  List<AssetResponseDto> getByAssetType(Long typeId);
 
