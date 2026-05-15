@@ -74,7 +74,7 @@ public class AssetServiceImpl implements AssetService {
                 .orElseThrow(() -> new RuntimeException("Location not found"));
 
         asset.setAssetName(dto.getAssetName());
-        asset.setSerialNumber(dto.getSerialNumber());
+        // asset.setSerialNumber(dto.getSerialNumber());
         asset.setBrand(dto.getBrand());
         asset.setModel(dto.getModel());
         asset.setPurchaseDate(dto.getPurchaseDate());
@@ -187,7 +187,7 @@ public class AssetServiceImpl implements AssetService {
 
             // update fields
             asset.setAssetName(dto.getAssetName());
-            asset.setSerialNumber(dto.getSerialNumber());
+           // asset.setSerialNumber(dto.getSerialNumber());
             asset.setBrand(dto.getBrand());
             asset.setModel(dto.getModel());
             asset.setPurchaseDate(dto.getPurchaseDate());

@@ -17,8 +17,8 @@ public class AssetRequestDto {
     @Size(min = 3, max = 100)
     private String assetName;
 
-    @NotBlank(message = "Serial number is required")
-    private String serialNumber;
+    // @NotBlank(message = "Serial number is required")
+    // private String serialNumber;
 
     @NotBlank(message = "Brand is required")
     private String brand;

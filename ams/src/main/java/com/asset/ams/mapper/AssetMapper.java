@@ -17,7 +17,7 @@ public class AssetMapper {
         Asset asset = new Asset();
 
         asset.setAssetName(dto.getAssetName());
-        asset.setSerialNumber(dto.getSerialNumber());
+      //  asset.setSerialNumber(dto.getSerialNumber());
         asset.setBrand(dto.getBrand());
         asset.setModel(dto.getModel());
         asset.setPurchaseDate(dto.getPurchaseDate());
@@ -40,7 +40,7 @@ public class AssetMapper {
         return AssetResponseDto.builder()
                 .assetId(asset.getAssetId())
                 .assetName(asset.getAssetName())
-                .serialNumber(asset.getSerialNumber())
+              //  .serialNumber(asset.getSerialNumber())
                 .brand(asset.getBrand())
                 .model(asset.getModel())
                 .purchaseDate(asset.getPurchaseDate())

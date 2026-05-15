@@ -23,7 +23,8 @@ public class corsConfig {
 
         config.setAllowedOriginPatterns(corsProperties.getAllowedOrigins());
         config.setAllowedMethods(corsProperties.getAllowedMethods());
-        config.setAllowedHeaders(corsProperties.getAllowedHeaders());
+         config.setAllowedHeaders(List.of(
+        "Authorization", "Content-Type", "Accept", "Origin", "X-Requested-With"));
         config.setAllowCredentials(corsProperties.isAllowCredentials());
         config.setMaxAge(corsProperties.getMaxAge());
         config.setExposedHeaders(List.of("Authorization", "Content-Type"));

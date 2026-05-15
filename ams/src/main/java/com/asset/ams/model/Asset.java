@@ -39,8 +39,8 @@ public class Asset extends BaseEntity{
 
     private String assetName;
 
-    @Column(unique = true)
-    private String serialNumber;
+    // @Column(unique = true)
+    // private String serialNumber;
 
     private String brand;
     private String model;

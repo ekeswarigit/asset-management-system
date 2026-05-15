@@ -54,7 +54,7 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
-}
+ }
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -64,4 +64,5 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
+
 }
