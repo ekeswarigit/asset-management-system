@@ -14,4 +14,6 @@ public interface AssetTransferRequestRepository extends JpaRepository<AssetTrans
     List<AssetTransferRequest> findByStatus(TransferStatus status);
     List<AssetTransferRequest> findByRequestedByUserId(Long userId);
     List<AssetTransferRequest> findByAssetAssetId(Long assetId);
+    // Add this one for the Admin view!
+    List<AssetTransferRequest> findAllByOrderByRequestedAtDesc();
 }

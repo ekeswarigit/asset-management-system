@@ -1,6 +1,8 @@
 package com.asset.ams.Service.Impl;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -10,9 +12,9 @@ import com.asset.ams.Repository.LocationRepository;
 import com.asset.ams.Repository.TransferHistoryRepository;
 import com.asset.ams.Repository.UserRepository;
 import com.asset.ams.Service.TransferService;
-import com.asset.ams.dto.TransferActionDto;
 import com.asset.ams.dto.RequestDTO.TransferRequestDto;
 import com.asset.ams.dto.Response.TransferResponseDto;
+import com.asset.ams.dto.TransferActionDto;
 import com.asset.ams.mapper.TransferMapper;
 import com.asset.ams.model.Asset;
 import com.asset.ams.model.AssetTransferRequest;
@@ -99,5 +101,36 @@ public class TransferServiceImpl implements TransferService{
         transferRepository.save(request);
 
         return "Request " + dto.getStatus();
+    }
+
+     // Get all requests (Admin)
+    public List<TransferResponseDto> getAllTransfers() {
+        return transferRepository.findAllByOrderByRequestedAtDesc()
+                .stream()
+                .map(this::mapToResponseDto)
+                .collect(Collectors.toList());
+    }
+    // Get current user's requests
+    public List<TransferResponseDto> getMyTransfers(String username) {
+        User user = userRepository.findByuserName(username).orElseThrow();
+        return transferRepository.findByRequestedByUserId(user.getUserId())
+                .stream()
+                .map(this::mapToResponseDto)
+                .collect(Collectors.toList());
+    }
+    // Get location history for an asset
+    public List<TransferHistory> getLocationHistory(Long assetId) {
+        return historyRepository.findByAssetAssetId(assetId);
+    }
+    // Helper: Map Entity to Response DTO
+    private TransferResponseDto mapToResponseDto(AssetTransferRequest req) {
+        return TransferResponseDto.builder()
+                .atrid(req.getAtrid())
+                .assetName(req.getAsset() != null ? req.getAsset().getAssetName() : "Unknown Asset")
+                .fromLocation(req.getFromLocation() != null ? req.getFromLocation().getLocationName() : "None")
+                .toLocation(req.getToLocation() != null ? req.getToLocation().getLocationName() : "Unknown Location")
+                .status(req.getStatus() != null ? req.getStatus().name() : "PENDING")
+                .requestedBy(req.getRequestedBy() != null ? req.getRequestedBy().getUserName() : "Unknown User")
+                .build();
     }
 }

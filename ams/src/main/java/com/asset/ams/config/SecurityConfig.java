@@ -47,6 +47,7 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
             .requestMatchers(HttpMethod.DELETE, "/api/users").hasRole("ADMIN")
             // Admin routes
             .requestMatchers("/admin/**").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.POST, "/api/assets/bulk").hasRole("ADMIN")
             // Everything else
             .anyRequest().authenticated()
         );
