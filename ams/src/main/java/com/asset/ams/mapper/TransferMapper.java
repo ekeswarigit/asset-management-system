@@ -9,9 +9,10 @@ public class TransferMapper {
 
         return TransferResponseDto.builder()
                 .atrid(request.getAtrid())
+                .assetId(request.getAsset() != null ? request.getAsset().getAssetId() : null)
                 .assetName(request.getAsset().getAssetName())
-                .fromLocation(request.getFromLocation().getLocationName())
-                .toLocation(request.getToLocation().getLocationName())
+                .fromLocation(request.getFromLocation() != null ? request.getFromLocation().getLocationName() : "None")
+                .toLocation(request.getToLocation() != null ? request.getToLocation().getLocationName() : "Unknown Location")
                 .status(request.getStatus().name())
                 .requestedBy(request.getRequestedBy().getUserName())
                 .build();

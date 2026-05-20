@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class TransferResponseDto {
 
     private Long atrid;
+    private Long assetId;
     private String assetName;
     private String fromLocation;
     private String toLocation;

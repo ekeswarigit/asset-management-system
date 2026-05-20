@@ -4,6 +4,7 @@ import java.security.Principal;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class TransferController {
 
     private final TransferService transferService;
-     // Create request
+     
     @PostMapping
     public ResponseEntity<?> create(@RequestBody TransferRequestDto dto,
                                    Principal principal) {
@@ -44,14 +45,19 @@ public class TransferController {
         );
     }
     
-     // 3. Get all transfers (ADMIN only)
     @GetMapping
     public ResponseEntity<List<TransferResponseDto>> getAllTransfers() {
         return ResponseEntity.ok(transferService.getAllTransfers());
     }
-    // 4. Get transfers created by logged-in user
+    
     @GetMapping("/my")
     public ResponseEntity<List<TransferResponseDto>> getMyTransfers(Principal principal) {
         return ResponseEntity.ok(transferService.getMyTransfers(principal.getName()));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        transferService.deleteRequest(id);
+        return ResponseEntity.ok().build();
     }
 }

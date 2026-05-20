@@ -26,14 +26,14 @@ public class AssetSpecification {
                 keywordPredicates.add(cb.like(cb.lower(root.get("assetName")),    like));
                 keywordPredicates.add(cb.like(cb.lower(root.get("brand")),        like));
                 keywordPredicates.add(cb.like(cb.lower(root.get("model")),        like));
-                keywordPredicates.add(cb.like(cb.lower(root.get("serialNumber")), like));
 
-                try {
-                    Long idVal = Long.parseLong(keyword.trim());
-                    System.out.println(">>> Searching by assetId: " + idVal); 
-                    keywordPredicates.add(cb.equal(root.get("assetId"), idVal));
-                } catch (NumberFormatException ignored) {
-                    System.out.println(">>> keyword is not a number: " + keyword);
+                // Smartly extract numeric suffix for generated asset codes (e.g. HCHE001 -> 1)
+                String numericPart = keyword.trim().replaceAll("^.*?(\\d+)$", "$1");
+                if (numericPart.matches("\\d+")) {
+                    try {
+                        Long idVal = Long.parseLong(numericPart);
+                        keywordPredicates.add(cb.equal(root.get("assetId"), idVal));
+                    } catch (NumberFormatException ignored) {}
                 }
 
                 predicates.add(cb.or(keywordPredicates.toArray(new Predicate[0])));

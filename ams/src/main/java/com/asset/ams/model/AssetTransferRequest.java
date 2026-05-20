@@ -40,6 +40,7 @@ public class AssetTransferRequest extends BaseEntity {
     @JoinColumn(name = "from_location_id")
     private Location fromLocation;
 
+    @NotFound(action = NotFoundAction.IGNORE)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "to_location_id")
     private Location toLocation;

@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.asset.ams.dto.RequestDTO.TransferRequestDto;
 import com.asset.ams.dto.Response.TransferResponseDto;
-import com.asset.ams.model.TransferHistory;
 import com.asset.ams.dto.TransferActionDto;
+import com.asset.ams.model.TransferHistory;
 
 public interface TransferService {
 
@@ -18,6 +18,8 @@ public interface TransferService {
     public List<TransferResponseDto> getMyTransfers(String username);
 
     public List<TransferHistory> getLocationHistory(Long assetId);
+
+    public void deleteRequest(Long id);
 
 }
  

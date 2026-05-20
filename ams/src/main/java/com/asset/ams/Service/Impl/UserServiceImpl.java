@@ -26,8 +26,24 @@ public class UserServiceImpl implements UserService {
     private final SoftDeleteServiceImpl softDeleteServiceimpl;
     private final PasswordEncoder passwordEncoder;
 
+    private void validateEmailFormat(String email) {
+        if (email == null || !email.toLowerCase().matches("^[a-z0-9+_.-]+@(gmail|yahoo|outlook|hotmail|icloud|live|mail)\\.(com|in|org|net|co|edu|gov|info|io)$")) {
+            throw new RuntimeException("Invalid email format!");
+        }
+    }
+
     @Override
     public UserResponseDto createUser(UserRequestDto dto) {
+
+        validateEmailFormat(dto.getEmail());
+
+        if (userRepository.findByuserName(dto.getUserName()).isPresent()) {
+            throw new RuntimeException("Username already exists!");
+        }
+
+        if (userRepository.findByEmail(dto.getEmail()).isPresent()) {
+            throw new RuntimeException("Email already exists!");
+        }
 
         Role role = roleRepository.findById(dto.getRoleId())
                 .orElseThrow(() -> new RuntimeException("Role not found"));
@@ -65,11 +81,27 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto updateUser(Long id, UserRequestDto dto) {
 
+        validateEmailFormat(dto.getEmail());
+
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         Role role = roleRepository.findById(dto.getRoleId())
                 .orElseThrow(() -> new RuntimeException("Role not found"));
+
+        // If username changed, check for duplicate
+        if (!user.getUserName().equalsIgnoreCase(dto.getUserName())) {
+            if (userRepository.findByuserName(dto.getUserName()).isPresent()) {
+                throw new RuntimeException("Username already exists!");
+            }
+        }
+
+        // If email changed, check for duplicate
+        if (!user.getEmail().equalsIgnoreCase(dto.getEmail())) {
+            if (userRepository.findByEmail(dto.getEmail()).isPresent()) {
+                throw new RuntimeException("Email already exists!");
+            }
+        }
 
         user.setUserName(dto.getUserName());
         user.setEmail(dto.getEmail());

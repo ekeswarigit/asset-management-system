@@ -22,9 +22,11 @@ public class TransferHistory extends BaseEntity {
     private Asset asset;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @org.hibernate.annotations.NotFound(action = org.hibernate.annotations.NotFoundAction.IGNORE)
     private Location fromLocation;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @org.hibernate.annotations.NotFound(action = org.hibernate.annotations.NotFoundAction.IGNORE)
     private Location toLocation;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -29,6 +29,10 @@ import com.asset.ams.payload.AssetStatus;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import com.asset.ams.Service.TransferService;
+import com.asset.ams.dto.Response.TransferHistoryDto;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -37,6 +41,7 @@ import lombok.RequiredArgsConstructor;
 public class AssetController {
 
     private final AssetService assetService;
+    private final TransferService transferService;
 
     @PostMapping
     public ApiResponse<AssetResponseDto> create(@Valid @RequestBody AssetRequestDto dto) {
@@ -124,5 +129,27 @@ public class AssetController {
                 .success(true).message("Asset updated successfully")
                 .data(assetService.update(id, dto, image))
                 .errorCode(0).timestamp(LocalDateTime.now()).build();
+    }
+
+    @GetMapping("/{id}/location-history")
+    public ApiResponse<List<TransferHistoryDto>> getLocationHistory(@PathVariable Long id) {
+        List<TransferHistoryDto> history = transferService.getLocationHistory(id).stream()
+            .map(h -> TransferHistoryDto.builder()
+                .thid(h.getThid())
+                .reason(h.getReason())
+                .transferredAt(h.getTransferredAt())
+                .fromLocation(h.getFromLocation() != null ? new TransferHistoryDto.LocationDto(h.getFromLocation().getLocationName()) : null)
+                .toLocation(h.getToLocation() != null ? new TransferHistoryDto.LocationDto(h.getToLocation().getLocationName()) : null)
+                .approvedBy(h.getApprovedBy() != null ? new TransferHistoryDto.UserDto(h.getApprovedBy().getUserName()) : null)
+                .build())
+            .collect(Collectors.toList());
+
+        return ApiResponse.<List<TransferHistoryDto>>builder()
+                .success(true)
+                .message("Location history fetched successfully")
+                .data(history)
+                .errorCode(0)
+                .timestamp(LocalDateTime.now())
+                .build();
     }
 }

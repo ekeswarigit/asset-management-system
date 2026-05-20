@@ -67,6 +67,7 @@ public class Asset extends BaseEntity{
 
     @ManyToOne
     @JoinColumn(name = "location_id")
+    @org.hibernate.annotations.NotFound(action = org.hibernate.annotations.NotFoundAction.IGNORE)
     private Location location;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -36,7 +36,7 @@ public class TransferServiceImpl implements TransferService{
     private final AssetTransferRequestRepository transferRepository;
 
 
-     public TransferResponseDto createRequest(TransferRequestDto dto, String username) {
+    public TransferResponseDto createRequest(TransferRequestDto dto, String username) {
 
         Asset asset = assetRepository.findById(dto.getAssetId())
                 .orElseThrow(() -> new RuntimeException("Asset not found"));
@@ -112,7 +112,9 @@ public class TransferServiceImpl implements TransferService{
     }
     // Get current user's requests
     public List<TransferResponseDto> getMyTransfers(String username) {
-        User user = userRepository.findByuserName(username).orElseThrow();
+        User user = userRepository.findByEmail(username)
+                .orElseGet(() -> userRepository.findByuserName(username)
+                .orElseThrow(() -> new RuntimeException("User not found")));
         return transferRepository.findByRequestedByUserId(user.getUserId())
                 .stream()
                 .map(this::mapToResponseDto)
@@ -122,10 +124,13 @@ public class TransferServiceImpl implements TransferService{
     public List<TransferHistory> getLocationHistory(Long assetId) {
         return historyRepository.findByAssetAssetId(assetId);
     }
-    // Helper: Map Entity to Response DTO
+    public void deleteRequest(Long id) {
+        transferRepository.deleteById(id);
+    }
     private TransferResponseDto mapToResponseDto(AssetTransferRequest req) {
         return TransferResponseDto.builder()
                 .atrid(req.getAtrid())
+                .assetId(req.getAsset() != null ? req.getAsset().getAssetId() : null)
                 .assetName(req.getAsset() != null ? req.getAsset().getAssetName() : "Unknown Asset")
                 .fromLocation(req.getFromLocation() != null ? req.getFromLocation().getLocationName() : "None")
                 .toLocation(req.getToLocation() != null ? req.getToLocation().getLocationName() : "Unknown Location")
