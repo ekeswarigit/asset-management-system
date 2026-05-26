@@ -34,4 +34,7 @@ public class AssetResponseDto {
     private Long locationId;
 
     private String imageUrl;
+
+    private Long subcategoryId;
+    private String subcategoryName;
 }

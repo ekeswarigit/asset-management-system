@@ -56,17 +56,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<UserResponseDto> getAllUser(int page, int size, String search,String role) {
-
+    public Page<UserResponseDto> getAllUser(int page, int size, String search, String role) {
          Pageable pageable = PageRequest.of(page, size);
-
-         Page<User> user = userRepository.findAll(pageable);
+         Page<User> user = userRepository.searchUsers(search, role, pageable);
          return user.map(UserMapper::toDto);
-        // return employeeRepository.findAll()
-        //         .stream()
-        //         .filter(emp -> !emp.isDeleted())
-        //         .map(EmployeeMapper::toDto)
-        //         .toList();
     }
 
     @Override

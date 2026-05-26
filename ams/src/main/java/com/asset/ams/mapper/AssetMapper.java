@@ -12,7 +12,7 @@ import com.asset.ams.payload.AssetStatus;
 public class AssetMapper {
 
     // 📥 DTO → Entity
-    public static Asset toEntity(AssetRequestDto dto, AssetType type, Location location) {
+    public static Asset toEntity(AssetRequestDto dto, AssetType type, Location location, com.asset.ams.model.AssetSubcategory subcategory) {
 
         Asset asset = new Asset();
 
@@ -30,8 +30,13 @@ public class AssetMapper {
         // Relationships
         asset.setAssetType(type);
         asset.setLocation(location);
+        asset.setSubcategory(subcategory);
 
         return asset;
+    }
+
+    public static Asset toEntity(AssetRequestDto dto, AssetType type, Location location) {
+        return toEntity(dto, type, location, null);
     }
 
     // 📤 Entity → DTO
@@ -52,6 +57,9 @@ public class AssetMapper {
 
                 .assetTypeName(asset.getAssetType() != null ? asset.getAssetType().getTypeName() : null)
                 .typeId(asset.getAssetType() != null ? asset.getAssetType().getTypeId() : null)
+
+                .subcategoryName(asset.getSubcategory() != null ? asset.getSubcategory().getSubcategoryName() : null)
+                .subcategoryId(asset.getSubcategory() != null ? asset.getSubcategory().getSubcategoryId() : null)
 
                 .locationName(asset.getLocation() != null ? asset.getLocation().getLocationName() : null)
                 .locationId(asset.getLocation() != null ? asset.getLocation().getLocationId() : null)

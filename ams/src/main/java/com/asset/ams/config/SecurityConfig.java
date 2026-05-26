@@ -34,6 +34,8 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
             .requestMatchers("/v3/api-docs/**",
                              "/swagger-ui/**",
                              "/swagger-ui.html").permitAll()
+            // Static Uploads
+            .requestMatchers("/uploads/**").permitAll()
             // Auth
             .requestMatchers("/api/auth/login",
                              "/api/auth/register").permitAll()

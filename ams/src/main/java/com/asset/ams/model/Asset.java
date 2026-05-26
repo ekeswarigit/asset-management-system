@@ -66,6 +66,10 @@ public class Asset extends BaseEntity{
     private AssetType assetType;
 
     @ManyToOne
+    @JoinColumn(name = "subcategory_id")
+    private AssetSubcategory subcategory;
+
+    @ManyToOne
     @JoinColumn(name = "location_id")
     @org.hibernate.annotations.NotFound(action = org.hibernate.annotations.NotFoundAction.IGNORE)
     private Location location;

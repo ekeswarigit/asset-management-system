@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.asset.ams.Repository.AssetRepository;
 import com.asset.ams.Repository.AssetTypeRepository;
+import com.asset.ams.Repository.AssetSubcategoryRepository;
 import com.asset.ams.Repository.LocationRepository;
 import com.asset.ams.Repository.UserRepository;
 import com.asset.ams.Service.AssetService;
@@ -24,6 +25,7 @@ import com.asset.ams.dto.Response.AssignResponseDto;
 import com.asset.ams.mapper.AssetMapper;
 import com.asset.ams.model.Asset;
 import com.asset.ams.model.AssetType;
+import com.asset.ams.model.AssetSubcategory;
 import com.asset.ams.model.Location;
 import com.asset.ams.model.User;
 import com.asset.ams.payload.AssetCondition;
@@ -38,6 +40,7 @@ public class AssetServiceImpl implements AssetService {
     
     private final AssetRepository assetRepository;
     private final AssetTypeRepository assetTypeRepository;
+    private final AssetSubcategoryRepository assetSubcategoryRepository;
     private final LocationRepository locationRepository;
     private final UserRepository userRepository;
     private final FileStorageService fileStorageService;
@@ -52,7 +55,13 @@ public class AssetServiceImpl implements AssetService {
         Location location = locationRepository.findById(dto.getLocationId())
                 .orElseThrow(() -> new RuntimeException("Location not found"));
 
-        Asset saved = assetRepository.save(AssetMapper.toEntity(dto, type, location));
+        AssetSubcategory subcategory = null;
+        if (dto.getSubcategoryId() != null) {
+            subcategory = assetSubcategoryRepository.findById(dto.getSubcategoryId())
+                    .orElseThrow(() -> new RuntimeException("Subcategory not found"));
+        }
+
+        Asset saved = assetRepository.save(AssetMapper.toEntity(dto, type, location, subcategory));
 
         // Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         // String userEmail = auth.getName();
@@ -73,6 +82,12 @@ public class AssetServiceImpl implements AssetService {
         Location location = locationRepository.findById(dto.getLocationId())
                 .orElseThrow(() -> new RuntimeException("Location not found"));
 
+        AssetSubcategory subcategory = null;
+        if (dto.getSubcategoryId() != null) {
+            subcategory = assetSubcategoryRepository.findById(dto.getSubcategoryId())
+                    .orElseThrow(() -> new RuntimeException("Subcategory not found"));
+        }
+
         asset.setAssetName(dto.getAssetName());
         // asset.setSerialNumber(dto.getSerialNumber());
         asset.setBrand(dto.getBrand());
@@ -85,6 +100,7 @@ public class AssetServiceImpl implements AssetService {
         asset.setNotes(dto.getNotes());
         asset.setAssetType(type);
         asset.setLocation(location);
+        asset.setSubcategory(subcategory);
 
         return AssetMapper.toDto(assetRepository.save(asset));
     }
@@ -160,7 +176,13 @@ public class AssetServiceImpl implements AssetService {
             Location location = locationRepository.findById(dto.getLocationId())
                     .orElseThrow(() -> new RuntimeException("Location not found"));
 
-            Asset asset = AssetMapper.toEntity(dto, type, location);
+            AssetSubcategory subcategory = null;
+            if (dto.getSubcategoryId() != null) {
+                subcategory = assetSubcategoryRepository.findById(dto.getSubcategoryId())
+                        .orElseThrow(() -> new RuntimeException("Subcategory not found"));
+            }
+
+            Asset asset = AssetMapper.toEntity(dto, type, location, subcategory);
 
             // ✅ save image if provided
             if (image != null && !image.isEmpty()) {
@@ -185,6 +207,12 @@ public class AssetServiceImpl implements AssetService {
             Location location = locationRepository.findById(dto.getLocationId())
                     .orElseThrow(() -> new RuntimeException("Location not found"));
 
+            AssetSubcategory subcategory = null;
+            if (dto.getSubcategoryId() != null) {
+                subcategory = assetSubcategoryRepository.findById(dto.getSubcategoryId())
+                        .orElseThrow(() -> new RuntimeException("Subcategory not found"));
+            }
+
             // update fields
             asset.setAssetName(dto.getAssetName());
            // asset.setSerialNumber(dto.getSerialNumber());
@@ -198,6 +226,7 @@ public class AssetServiceImpl implements AssetService {
             asset.setNotes(dto.getNotes());
             asset.setAssetType(type);
             asset.setLocation(location);
+            asset.setSubcategory(subcategory);
 
             // ✅ update image if new one provided
             if (image != null && !image.isEmpty()) {

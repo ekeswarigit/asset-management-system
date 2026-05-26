@@ -44,4 +44,6 @@ public class AssetRequestDto {
 
     @NotNull(message = "Location is required")
     private Long locationId;
+
+    private Long subcategoryId;
 }

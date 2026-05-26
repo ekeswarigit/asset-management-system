@@ -1,13 +1,12 @@
 package com.asset.ams.model;
 
-import java.util.List;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,17 +17,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AssetType extends BaseEntity {
+public class AssetSubcategory extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long typeId;
+    private Long subcategoryId;
 
-    @Column(nullable = false, unique = true)
-    private String typeName;
+    @Column(nullable = false)
+    private String subcategoryName;
 
     private String description;
 
-     @OneToMany(mappedBy = "assetType")
-     private List<Asset> assets;
+    @ManyToOne
+    @JoinColumn(name = "type_id", nullable = false)
+    private AssetType assetType;
 }
